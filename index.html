@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Yıl Dönümü Sürprizi 💖</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Dancing Script', cursive;
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd0 50%, #f48fb1 100%);
+    color: #800020;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    overflow: hidden;
+    flex-direction: column;
+  }
+
+  .heart-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      radial-gradient(circle at 20% 20%, #ff6384 12px, transparent 13px),
+      radial-gradient(circle at 40% 30%, #ff4f7a 12px, transparent 13px),
+      radial-gradient(circle at 60% 50%, #ff6384 12px, transparent 13px),
+      radial-gradient(circle at 80% 20%, #ff4f7a 12px, transparent 13px),
+      radial-gradient(circle at 30% 70%, #ff6384 12px, transparent 13px),
+      radial-gradient(circle at 50% 80%, #ff4f7a 12px, transparent 13px),
+      radial-gradient(circle at 70% 70%, #ff6384 12px, transparent 13px);
+    background-size: 60px 60px;
+    animation: hearts-float 8s linear infinite;
+  }
+
+  @keyframes hearts-float {
+    0% { background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0; }
+    100% { background-position: 100px 100px, 200px 150px, 300px 200px, 400px 100px, 250px 250px, 350px 300px, 450px 250px; }
+  }
+
+  h1 {
+    font-size: 2.8rem;
+    margin-bottom: 0.5em;
+  }
+
+  p {
+    font-size: 1.4rem;
+    margin: 1em 0;
+  }
+
+  button {
+    background-color: #ff4f7a;
+    border: none;
+    color: white;
+    font-size: 1.3rem;
+    padding: 0.8em 2em;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(255,79,122,0.6);
+    transition: background-color 0.3s ease;
+    margin-top: 1em;
+  }
+
+  button:hover {
+    background-color: #ff6384;
+  }
+
+  .container {
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 2em;
+    border-radius: 25px;
+    box-shadow: 0 8px 15px rgba(255, 79, 122, 0.4);
+    z-index: 1;
+  }
+
+  .question {
+    font-size: 1.6rem;
+    margin-bottom: 1em;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  .option-btn {
+    background-color: #fce4ec;
+    border: 2px solid #ff4f7a;
+    border-radius: 20px;
+    padding: 0.8em;
+    font-size: 1.2rem;
+    color: #800020;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .option-btn:hover {
+    background-color: #ff4f7a;
+    color: white;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  img.final-photo {
+    max-width: 100%;
+    border-radius: 20px;
+    margin-top: 1em;
+    box-shadow: 0 6px 20px rgba(255, 79, 122, 0.6);
+  }
+
+  .final-message {
+    margin-top: 1em;
+    font-size: 1.8rem;
+    color: #b22222;
+    font-weight: bold;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="heart-bg"></div>
+
+<div class="container" id="app">
+
+  <!-- Giriş Ekranı -->
+  <div id="welcome-screen">
+    <h1>Hoş geldin iki gözümün çiçeği 🌸</h1>
+    <p>Hazırsan sana birkaç sorum var...</p>
+    <button id="start-btn">❤️ Başla</button>
+  </div>
+
+  <!-- Soru Ekranı -->
+  <div id="question-screen" class="hidden">
+    <div class="question" id="question-text"></div>
+    <div class="options">
+      <button class="option-btn" id="optionA"></button>
+      <button class="option-btn" id="optionB"></button>
+    </div>
+  </div>
+
+  <!-- Hazır Mısın Ekranı -->
+  <div id="ready-screen" class="hidden">
+    <h1>Hazır mısın?</h1>
+    <button id="ready-btn">Evet</button>
+  </div>
+
+  <!-- Final Ekranı -->
+  <div id="final-screen" class="hidden">
+    <img src="biz.jpg" alt="Bizim Fotoğraf" class="final-photo" />
+    <div class="final-message" id="final-message"></div>
+  </div>
+
+</div>
+
+<script>
+  const questions = [
+    {
+      question: "İlk buluşmamız neredeydi?",
+      options: { A: "AVM", B: "Cafe" },
+      correct: "B"
+    },
+    {
+      question: "İlk birlikte gittiğimiz film türü neydi?",
+      options: { A: "Komedi", B: "Korku" },
+      correct: "A"
+    },
+    {
+      question: "En çok hangi gün beni sinir ettin 😅?",
+      options: { A: "Dışarı çıkmadığımız gün", B: "Beni sevmediğin gün" },
+      correct: "A"
+    },
+    {
+      question: "Ben seni hangi hayvana benzetiyorum?",
+      options: { A: "Ördek", B: "Kedi" },
+      correct: "A"
+    },
+    {
+      question: "Beraber en çok neyi yapmayı severiz?",
+      options: { A: "Başbaşa kalmak", B: "Yemek yemek" },
+      correct: "A"
+    }
+  ];
+
+  const finalMessage = "Yıl dönümümüz kutlu olsun bitanem ❤️ Seninle her şey çok güzel, daha nice yıllar seninle...";
+
+  // Elementler
+  const welcomeScreen = document.getElementById('welcome-screen');
+  const questionScreen = document.getElementById('question-screen');
+  const readyScreen = document.getElementById('ready-screen');
+  const finalScreen = document.getElementById('final-screen');
+
+  const startBtn = document.getElementById('start-btn');
+  const questionText = document.getElementById('question-text');
+  const optionA = document.getElementById('optionA');
+  const optionB = document.getElementById('optionB');
+
+  const readyBtn = document.getElementById('ready-btn');
+  const finalMsgElem = document.getElementById('final-message');
+
+  let currentQuestionIndex = 0;
+  let correctAnswers = 0;
+
+  startBtn.addEventListener('click', () => {
+    welcomeScreen.classList.add('hidden');
+    questionScreen.classList.remove('hidden');
+    showQuestion();
+  });
+
+  function showQuestion() {
+    const q = questions[currentQuestionIndex];
+    questionText.textContent = q.question;
+    optionA.textContent = 'A) ' + q.options.A;
+    optionB.textContent = 'B) ' + q.options.B;
+  }
+
+  optionA.addEventListener('click', () => handleAnswer('A'));
+  optionB.addEventListener('click', () => handleAnswer('B'));
+
+  function handleAnswer(choice) {
+    const q = questions[currentQuestionIndex];
+    if (choice === q.correct) {
+      correctAnswers++;
+    }
+    currentQuestionIndex++;
+    if (currentQuestionIndex < questions.length) {
+      showQuestion();
+    } else {
+      // Sorular bitti, hazır mısın ekranına geç
+      questionScreen.classList.add('hidden');
+      readyScreen.classList.remove('hidden');
+    }
+  }
+
+  readyBtn.addEventListener('click', () => {
+    readyScreen.classList.add('hidden');
+    finalScreen.classList.remove('hidden');
+    finalMsgElem.textContent = finalMessage;
+  });
+</script>
+
+</body>
+</html>
